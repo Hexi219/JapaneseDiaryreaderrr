@@ -658,14 +658,6 @@
               <input type="range" id="pitch" class="slider" min="0.8" max="1.2" value="1" step="0.05">
             </div>
           </div>
-          
-          <div class="voice-selection">
-            <label>聲音</label>
-            <select id="voice-select" class="voice-selector">
-              <option value="default">預設女聲</option>
-              <!-- 其他聲音選項會在JS中動態添加 -->
-            </select>
-          </div>
         </div>
         
         <div class="settings-section">
@@ -781,8 +773,8 @@
       // 設置朗讀設定控制
       setupSpeechControls();
       
-      // 嘗試預加載語音
-      setTimeout(loadVoices, 100);
+      // 初始化語音
+      initSpeechVoices();
       
       // 載入用戶保存的主題
       const savedTheme = localStorage.getItem('diary-theme') || 'light';
@@ -796,6 +788,20 @@
       document.getElementById('import-file').addEventListener('change', importDiaries);
     });
     
+    // 初始化語音
+    function initSpeechVoices() {
+      // 某些瀏覽器需要等待語音列表載入
+      if (typeof speechSynthesis !== 'undefined') {
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = function() {
+            // 確保語音列表已載入
+            const voices = window.speechSynthesis.getVoices();
+            console.log('語音已載入：', voices.length);
+          };
+        }
+      }
+    }
+    
     // 載入朗讀設置
     function loadSpeechSettings() {
       // 載入速度設置
@@ -807,41 +813,6 @@
       const savedPitch = localStorage.getItem('speech-pitch') || '1.0';
       document.getElementById('pitch').value = savedPitch;
       document.getElementById('pitch-value').textContent = parseFloat(savedPitch).toFixed(1);
-    }
-    
-    // 加載可用的語音
-    function loadVoices() {
-      // 獲取可用的語音
-      const voices = window.speechSynthesis.getVoices();
-      
-      // 過濾出日語語音
-      const japaneseVoices = voices.filter(voice => voice.lang.includes('ja'));
-      
-      if (japaneseVoices.length > 0) {
-        const voiceSelect = document.getElementById('voice-select');
-        
-        // 清空現有選項（保留默認選項）
-        while (voiceSelect.options.length > 1) {
-          voiceSelect.remove(1);
-        }
-        
-        // 添加日語語音選項
-        japaneseVoices.forEach(voice => {
-          const option = document.createElement('option');
-          option.value = voice.name;
-          option.textContent = voice.name;
-          voiceSelect.appendChild(option);
-        });
-        
-        // 設置保存的語音
-        const savedVoice = localStorage.getItem('speech-voice');
-        if (savedVoice && voiceSelect.querySelector(`option[value="${savedVoice}"]`)) {
-          voiceSelect.value = savedVoice;
-        }
-      }
-      
-      // 監聽語音列表變化（某些瀏覽器會延遲加載語音）
-      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
     
     // 設置朗讀設定控制
@@ -861,15 +832,6 @@
         document.getElementById('pitch-value').textContent = value;
         localStorage.setItem('speech-pitch', value);
       });
-      
-      // 設置語音選擇器
-      const voiceSelect = document.getElementById('voice-select');
-      voiceSelect.addEventListener('change', function() {
-        localStorage.setItem('speech-voice', this.value);
-      });
-      
-      // 監聽語音列表變化（某些瀏覽器會延遲加載語音）
-      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
     
     // 語音朗讀功能
@@ -895,25 +857,13 @@
       utter.pitch = parseFloat(document.getElementById('pitch').value);
       utter.volume = 1.0;
       
-      // 設置選擇的語音
-      const selectedVoice = document.getElementById('voice-select').value;
+      // 選擇女聲
       const voices = window.speechSynthesis.getVoices();
+      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
       
-      if (selectedVoice !== 'default') {
-        // 使用用戶選擇的語音
-        const voice = voices.find(v => v.name === selectedVoice);
-        if (voice) utter.voice = voice;
-      } else {
-        // 使用默認女聲
-        const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
-          (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
-        
-        if (jaFemaleVoices.length > 0) {
-          utter.voice = jaFemaleVoices[0];
-        } else {
-          const jaVoices = voices.filter(v => v.lang.includes('ja'));
-          if (jaVoices.length > 0) utter.voice = jaVoices[0];
-        }
+      if (jaFemaleVoices.length > 0) {
+        utter.voice = jaFemaleVoices[0];
       }
       
       // 設置結束事件處理器
@@ -949,25 +899,13 @@
       utter.pitch = parseFloat(document.getElementById('pitch').value);
       utter.volume = 1.0;
       
-      // 設置選擇的語音
-      const selectedVoice = document.getElementById('voice-select').value;
+      // 選擇女聲
       const voices = window.speechSynthesis.getVoices();
+      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
       
-      if (selectedVoice !== 'default') {
-        // 使用用戶選擇的語音
-        const voice = voices.find(v => v.name === selectedVoice);
-        if (voice) utter.voice = voice;
-      } else {
-        // 使用默認女聲
-        const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
-          (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
-        
-        if (jaFemaleVoices.length > 0) {
-          utter.voice = jaFemaleVoices[0];
-        } else {
-          const jaVoices = voices.filter(v => v.lang.includes('ja'));
-          if (jaVoices.length > 0) utter.voice = jaVoices[0];
-        }
+      if (jaFemaleVoices.length > 0) {
+        utter.voice = jaFemaleVoices[0];
       }
       
       // 設置結束事件處理器
