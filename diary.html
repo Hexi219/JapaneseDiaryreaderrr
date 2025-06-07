@@ -557,7 +557,7 @@
         
         <textarea id="diary" placeholder="輸入你的日語日記..."></textarea>
         <div class="button-group">
-          <button class="primary-btn" onclick="speak()">朗讀</button>
+          <button class="primary-btn" id="speak-btn" onclick="speak()">朗讀</button>
           <button class="primary-btn" onclick="saveDiary()">儲存</button>
           <button class="secondary-btn" onclick="clearInput()">清空</button>
         </div>
@@ -645,7 +645,7 @@
       <div class="modal-view active">
         <div class="diary-content" id="modal-content"></div>
         <div class="diary-actions">
-          <button class="primary-btn" onclick="speakDiaryInModal()">朗讀</button>
+          <button class="primary-btn" id="modal-speak-btn" onclick="speakDiaryInModal()">朗讀</button>
           <button class="danger-btn" onclick="confirmDeleteDiary()">刪除</button>
         </div>
       </div>
@@ -827,6 +827,9 @@
         return;
       }
       
+      // 先停止當前正在朗讀的語音
+      stopSpeaking();
+      
       // 預處理文字，去除不必要的符號
       const cleanedText = cleanTextForSpeech(content);
       
@@ -851,7 +854,96 @@
       utter.pitch = 1.1;
       utter.volume = 1.0;
       
+      // 設置結束事件處理器
+      utter.onend = function() {
+        updateSpeakButtonStatus(false, 'main');
+      };
+      
       window.speechSynthesis.speak(utter);
+      
+      // 更新按鈕狀態 - 只更新主界面
+      updateSpeakButtonStatus(true, 'main');
+    }
+    
+    // 朗讀 Modal 中的日記
+    function speakDiaryInModal() {
+      const content = document.getElementById('modal-content').textContent;
+      if (!content) {
+        toast.show('日記內容為空！');
+        return;
+      }
+      
+      // 先停止當前正在朗讀的語音
+      stopSpeaking();
+      
+      // 預處理文字，去除不必要的符號
+      const cleanedText = cleanTextForSpeech(content);
+      
+      const utter = new SpeechSynthesisUtterance(cleanedText);
+      utter.lang = "ja-JP";
+      
+      // 嘗試選擇女性日語語音
+      const voices = window.speechSynthesis.getVoices();
+      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
+      
+      if (jaFemaleVoices.length > 0) {
+        utter.voice = jaFemaleVoices[0];
+      } else {
+        const jaVoices = voices.filter(v => v.lang === "ja-JP");
+        if (jaVoices.length > 0) utter.voice = jaVoices[0];
+      }
+      
+      // 取得使用者設定的語速
+      const rate = parseFloat(document.getElementById('rate').value);
+      utter.rate = rate;
+      utter.pitch = 1.1;
+      utter.volume = 1.0;
+      
+      // 設置結束事件處理器
+      utter.onend = function() {
+        updateSpeakButtonStatus(false, 'modal');
+      };
+      
+      window.speechSynthesis.speak(utter);
+      
+      // 更新按鈕狀態 - 只更新模態框界面
+      updateSpeakButtonStatus(true, 'modal');
+    }
+    
+    // 停止朗讀
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
+      // 重置所有按鈕狀態
+      updateSpeakButtonStatus(false, 'all');
+    }
+    
+    // 更新朗讀按鈕狀態
+    function updateSpeakButtonStatus(isSpeaking, target) {
+      const mainSpeakBtn = document.getElementById('speak-btn');
+      const modalSpeakBtn = document.getElementById('modal-speak-btn');
+      
+      if ((target === 'main' || target === 'all') && mainSpeakBtn) {
+        mainSpeakBtn.textContent = isSpeaking ? '暫停朗讀' : '朗讀';
+        mainSpeakBtn.onclick = isSpeaking ? function() { stopSpeaking(); } : function() { speak(); };
+      }
+      
+      if ((target === 'modal' || target === 'all') && modalSpeakBtn) {
+        modalSpeakBtn.textContent = isSpeaking ? '暫停朗讀' : '朗讀';
+        modalSpeakBtn.onclick = isSpeaking ? function() { stopSpeaking(); } : function() { speakDiaryInModal(); };
+      }
+    }
+
+    // 關閉 Modal
+    function closeModal() {
+      document.getElementById('diaryModal').style.display = 'none';
+      currentDiaryId = null;
+      
+      // 只有當模態框按鈕處於朗讀狀態時才停止朗讀
+      const modalSpeakBtn = document.getElementById('modal-speak-btn');
+      if (modalSpeakBtn && modalSpeakBtn.textContent === '暫停朗讀') {
+        stopSpeaking();
+      }
     }
     
     // 儲存日記功能
@@ -946,18 +1038,6 @@
         
         document.getElementById('diaryModal').style.display = 'block';
       }
-    }
-    
-    // 關閉 Modal
-    function closeModal() {
-      document.getElementById('diaryModal').style.display = 'none';
-      currentDiaryId = null;
-    }
-    
-    // 朗讀 Modal 中的日記
-    function speakDiaryInModal() {
-      const content = document.getElementById('modal-content').textContent;
-      speak(content);
     }
     
     // 保存編輯後的日記
