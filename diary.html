@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日語日記朗讀</title>
+  <style>
+    :root {
+      --primary-color: #4a6fa5;
+      --accent-color: #ff8c42;
+      --bg-color: #f5f7fa;
+      --text-color: #333;
+      --card-bg: #ffffff;
+      --border-color: #dce0e6;
+    }
+
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      padding: 0; 
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    textarea { 
+      width: 100%;
+      height: 120px;
+      font-size: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      box-sizing: border-box;
+      resize: vertical;
+      margin-bottom: 15px;
+      transition: border 0.3s;
+      font-family: inherit;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    button { 
+      font-size: 1rem;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .primary-btn {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .secondary-btn {
+      background-color: white;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .danger-btn {
+      background-color: #f44336;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    h2 {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    /* 標籤切換樣式 */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* 主題選擇 */
+    .themes {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .theme-preview {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      margin-bottom: 5px;
+      border: 2px solid var(--border-color);
+      transition: transform 0.2s;
+    }
+    
+    .theme-preview:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-name {
+      font-size: 0.8rem;
+      color: var(--text-color);
+    }
+
+    /* 語速控制 */
+    .control {
+      margin: 15px 0;
+    }
+
+    .control label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .slider {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+    .value-display {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+    }
+
+    /* 日記列表 */
+    .diary-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .diary-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .diary-item:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .diary-title {
+      font-weight: 500;
+    }
+
+    .diary-preview {
+      color: #777;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    /* 日記詳細視圖 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      margin-right: 10px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .modal-tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .modal-view, .modal-edit {
+      display: none;
+    }
+
+    .modal-view.active, .modal-edit.active {
+      display: block;
+    }
+
+    .diary-content {
+      margin-top: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .diary-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* 檔案上傳按鈕 */
+    .file-input {
+      display: none;
+    }
+
+    .file-label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background-color: white;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .file-label:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .settings-section {
+      margin-bottom: 25px;
+    }
+
+    /* 自訂提示對話框樣式 */
+    .toast-container {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .toast-box {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 300px;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .toast-message {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    .toast-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 短語面板樣式 */
+    .phrase-panel {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    .phrase-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .phrase-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .phrase-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-color);
+    }
+    
+    .phrase-category {
+      margin-bottom: 15px;
+      background: rgba(0,0,0,0.02);
+      border-radius: 6px;
+      padding: 10px;
+      position: relative;
+    }
+    
+    .phrase-category-title {
+      font-weight: 500;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .phrase-category-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .phrase-action-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      padding: 2px 5px;
+      font-size: 0.9rem;
+    }
+    
+    .phrase-action-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .phrases {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .phrase-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .phrase-item:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .phrase-edit-mode .phrase-item {
+      padding-right: 30px;
+    }
+    
+    .phrase-delete {
+      display: none;
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #f44336;
+      font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    
+    .phrase-edit-mode .phrase-delete {
+      display: block;
+    }
+    
+    .phrase-add-form {
+      margin-top: 10px;
+      display: none;
+      gap: 10px;
+    }
+    
+    .phrase-add-form.active {
+      display: flex;
+    }
+    
+    .phrase-add-form input {
+      flex-grow: 1;
+      padding: 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .phrase-add-inputs {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>日語日記朗讀</h1>
+  </header>
+
+  <div class="container">
+    <!-- 主要標籤切換 -->
+    <div class="tabs">
+      <div class="tab active" data-tab="diary">日記</div>
+      <div class="tab" data-tab="settings">設定</div>
+    </div>
+
+    <!-- 日記標籤內容 -->
+    <div class="tab-content active" id="diary-tab">
+      <div class="card">
+        <h2>撰寫日記</h2>
+        
+        <textarea id="diary" placeholder="輸入你的日語日記..."></textarea>
+        <div class="button-group">
+          <button class="primary-btn" onclick="speak()">朗讀</button>
+          <button class="primary-btn" onclick="saveDiary()">儲存</button>
+          <button class="secondary-btn" onclick="clearInput()">清空</button>
+        </div>
+      </div>
+      
+      <div class="card" id="diary-container">
+        <div class="button-group">
+          <h2>已儲存日記</h2>
+          <div style="margin-left: auto;">
+            <button class="secondary-btn" onclick="exportDiaries()">導出日記</button>
+            <input type="file" id="import-file" class="file-input" accept=".json">
+            <label for="import-file" class="file-label">導入日記</label>
+          </div>
+        </div>
+        <div class="diary-list" id="diary-list">
+          <!-- 日記項目會在這裡動態生成 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 設定標籤內容 -->
+    <div class="tab-content" id="settings-tab">
+      <div class="card">
+        <div class="settings-section">
+          <h2>外觀設定</h2>
+          <h3>主題顏色</h3>
+          <div class="themes">
+            <div class="theme-option" onclick="applyTheme('light')">
+              <div class="theme-preview" style="background-color: #f5f7fa;"></div>
+              <span class="theme-name">淺色</span>
+            </div>
+            <div class="theme-option" onclick="applyTheme('nature')">
+              <div class="theme-preview" style="background-color: #e9f4e9;"></div>
+              <span class="theme-name">自然</span>
+            </div>
+            <div class="theme-option" onclick="applyTheme('sky')">
+              <div class="theme-preview" style="background-color: #e3f0f9;"></div>
+              <span class="theme-name">天空</span>
+            </div>
+            <div class="theme-option" onclick="applyTheme('warm')">
+              <div class="theme-preview" style="background-color: #fff0e8;"></div>
+              <span class="theme-name">溫暖</span>
+            </div>
+            <div class="theme-option" onclick="applyTheme('dark')">
+              <div class="theme-preview" style="background-color: #292b36;"></div>
+              <span class="theme-name">深色</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h2>朗讀設定</h2>
+          <div class="control">
+            <label for="rate">朗讀速度</label>
+            <input type="range" id="rate" class="slider" min="0.5" max="2" value="1" step="0.1">
+            <div class="value-display">速度: <span id="rate-value">1.0</span></div>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h2>資料管理</h2>
+          <div class="button-group">
+            <button class="danger-btn" onclick="toast.confirm('確定要刪除所有日記嗎?', () => { clearAllDiaries(); })">刪除所有日記</button>
+          </div>
+          <p>警告：此操作無法撤銷，建議先導出日記備份。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日記詳細視圖 Modal -->
+  <div id="diaryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">日記標題</h2>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+
+      <div class="modal-tabs">
+        <div class="modal-tab active" data-modal-tab="view">查看</div>
+        <div class="modal-tab" data-modal-tab="edit">編輯</div>
+      </div>
+
+      <!-- 查看模式 -->
+      <div class="modal-view active">
+        <div class="diary-content" id="modal-content"></div>
+        <div class="diary-actions">
+          <button class="primary-btn" onclick="speakDiaryInModal()">朗讀</button>
+          <button class="danger-btn" onclick="confirmDeleteDiary()">刪除</button>
+        </div>
+      </div>
+
+      <!-- 編輯模式 -->
+      <div class="modal-edit">
+        <textarea id="edit-diary-content"></textarea>
+        <div class="diary-actions">
+          <button class="primary-btn" onclick="saveEditedDiary()">保存</button>
+          <button class="secondary-btn" onclick="cancelEdit()">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自訂提示對話框 -->
+  <div id="toast-container" class="toast-container">
+    <div class="toast-box">
+      <div id="toast-message" class="toast-message"></div>
+      <div class="toast-buttons" id="toast-buttons">
+        <!-- 按鈕會動態添加 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 主題設定
+    const themes = {
+      light: {
+        bgColor: '#f5f7fa',
+        primaryColor: '#4a6fa5',
+        accentColor: '#ff8c42',
+        textColor: '#333',
+        cardBg: '#ffffff',
+        borderColor: '#dce0e6'
+      },
+      nature: {
+        bgColor: '#e9f4e9',
+        primaryColor: '#4b8b3b',
+        accentColor: '#ff9d54',
+        textColor: '#2a3a2a',
+        cardBg: '#ffffff',
+        borderColor: '#d4e5d4'
+      },
+      sky: {
+        bgColor: '#e3f0f9',
+        primaryColor: '#386fa4',
+        accentColor: '#f76c5e',
+        textColor: '#333',
+        cardBg: '#ffffff',
+        borderColor: '#c9e0f5'
+      },
+      warm: {
+        bgColor: '#fff0e8',
+        primaryColor: '#d95e40',
+        accentColor: '#457b9d',
+        textColor: '#422b24',
+        cardBg: '#ffffff',
+        borderColor: '#f9e0d0'
+      },
+      dark: {
+        bgColor: '#292b36',
+        primaryColor: '#5d87c7',
+        accentColor: '#ff8f56',
+        textColor: '#e0e0e0',
+        cardBg: '#353745',
+        borderColor: '#1f2129'
+      }
+    };
+
+    // 當前選中的日記ID
+    let currentDiaryId = null;
+    
+    // 當頁面載入時執行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 載入已儲存的日記
+      loadDiaries();
+      
+      // 設定語速滑動條事件
+      document.getElementById('rate').addEventListener('input', function() {
+        document.getElementById('rate-value').textContent = this.value;
+      });
+      
+      // 嘗試預加載語音
+      window.speechSynthesis.getVoices();
+      
+      // 載入用戶保存的主題
+      const savedTheme = localStorage.getItem('diary-theme') || 'light';
+      applyTheme(savedTheme);
+      
+      // 設置標籤切換邏輯
+      setupTabs();
+      setupModalTabs();
+      
+      // 設置檔案導入功能
+      document.getElementById('import-file').addEventListener('change', importDiaries);
+    });
+    
+    // 設置標籤切換邏輯
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // 移除所有標籤的 active 類
+          tabs.forEach(t => t.classList.remove('active'));
+          // 給當前標籤添加 active 類
+          this.classList.add('active');
+          
+          // 隱藏所有內容
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          
+          // 顯示對應內容
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId + '-tab').classList.add('active');
+        });
+      });
+    }
+    
+    // 設置模態框標籤切換
+    function setupModalTabs() {
+      const modalTabs = document.querySelectorAll('.modal-tab');
+      modalTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // 移除所有標籤的 active 類
+          modalTabs.forEach(t => t.classList.remove('active'));
+          // 給當前標籤添加 active 類
+          this.classList.add('active');
+          
+          // 隱藏所有內容
+          document.querySelector('.modal-view').classList.remove('active');
+          document.querySelector('.modal-edit').classList.remove('active');
+          
+          // 顯示對應內容
+          const tabId = this.getAttribute('data-modal-tab');
+          document.querySelector(`.modal-${tabId}`).classList.add('active');
+          
+          // 如果切換到編輯視圖，載入內容到編輯區
+          if (tabId === 'edit') {
+            document.getElementById('edit-diary-content').value = 
+              document.getElementById('modal-content').textContent;
+          }
+        });
+      });
+    }
+    
+    // 應用主題
+    function applyTheme(themeName) {
+      const theme = themes[themeName] || themes.light;
+      document.documentElement.style.setProperty('--bg-color', theme.bgColor);
+      document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
+      document.documentElement.style.setProperty('--accent-color', theme.accentColor);
+      document.documentElement.style.setProperty('--text-color', theme.textColor);
+      document.documentElement.style.setProperty('--card-bg', theme.cardBg);
+      document.documentElement.style.setProperty('--border-color', theme.borderColor);
+      
+      // 保存用戶主題選擇
+      localStorage.setItem('diary-theme', themeName);
+    }
+    
+    // 處理標點符號和特殊符號
+    function cleanTextForSpeech(text) {
+      // 保留句號、問號、驚嘆號，但移除或替換其他特殊符號
+      return text
+        .replace(/[、「」『』（）\[\]【】〈〉《》〔〕｛｝［］]/g, ' ')
+        .replace(/[\/\\\|]/g, ' ')
+        .replace(/[+\-*=]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    
+    // 語音朗讀功能
+    function speak(text) {
+      // 使用傳入的文本或從輸入框獲取
+      const content = text || document.getElementById('diary').value;
+      if (!content) {
+        toast.show('請先輸入日語內容！');
+        return;
+      }
+      
+      // 預處理文字，去除不必要的符號
+      const cleanedText = cleanTextForSpeech(content);
+      
+      const utter = new SpeechSynthesisUtterance(cleanedText);
+      utter.lang = "ja-JP";
+      
+      // 嘗試選擇女性日語語音
+      const voices = window.speechSynthesis.getVoices();
+      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
+      
+      if (jaFemaleVoices.length > 0) {
+        utter.voice = jaFemaleVoices[0];
+      } else {
+        const jaVoices = voices.filter(v => v.lang === "ja-JP");
+        if (jaVoices.length > 0) utter.voice = jaVoices[0];
+      }
+      
+      // 取得使用者設定的語速
+      const rate = parseFloat(document.getElementById('rate').value);
+      utter.rate = rate;
+      utter.pitch = 1.1;
+      utter.volume = 1.0;
+      
+      window.speechSynthesis.speak(utter);
+    }
+    
+    // 儲存日記功能
+    function saveDiary() {
+      const text = document.getElementById('diary').value.trim();
+      if (!text) {
+        toast.show('請先輸入日記內容！');
+        return;
+      }
+      
+      // 取得當前時間作為日記標題
+      const now = new Date();
+      const title = now.toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      // 取得已儲存的日記，若無則建立新陣列
+      let diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      
+      // 將新日記添加到陣列
+      diaries.unshift({
+        id: Date.now(),
+        title: title,
+        content: text,
+        date: now.toISOString()
+      });
+      
+      // 儲存回 localStorage
+      localStorage.setItem('japanese-diaries', JSON.stringify(diaries));
+      
+      // 重新載入日記列表
+      loadDiaries();
+      
+      toast.show('日記已儲存！');
+    }
+    
+    // 載入已儲存的日記列表
+    function loadDiaries() {
+      const diaryList = document.getElementById('diary-list');
+      diaryList.innerHTML = '';
+      
+      // 從 localStorage 獲取日記
+      const diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      
+      if (diaries.length === 0) {
+        diaryList.innerHTML = '<p>尚無儲存的日記</p>';
+        return;
+      }
+      
+      // 為每個日記建立項目
+      diaries.forEach(diary => {
+        const diaryElement = document.createElement('div');
+        diaryElement.className = 'diary-item';
+        diaryElement.setAttribute('data-id', diary.id);
+        
+        const preview = diary.content.length > 30 ? 
+                        diary.content.substring(0, 30) + '...' : 
+                        diary.content;
+        
+        diaryElement.innerHTML = `
+          <div>
+            <div class="diary-title">${diary.title}</div>
+            <div class="diary-preview">${preview}</div>
+          </div>
+        `;
+        
+        // 點擊打開詳細視圖
+        diaryElement.onclick = function() {
+          openDiaryDetail(diary.id);
+        };
+        
+        diaryList.appendChild(diaryElement);
+      });
+    }
+    
+    // 打開日記詳細視圖
+    function openDiaryDetail(diaryId) {
+      const diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      const diary = diaries.find(d => d.id == diaryId);
+      
+      if (diary) {
+        currentDiaryId = diary.id;
+        document.getElementById('modal-title').textContent = diary.title;
+        document.getElementById('modal-content').textContent = diary.content;
+        
+        // 重置回查看視圖
+        document.querySelector('.modal-tab[data-modal-tab="view"]').click();
+        
+        document.getElementById('diaryModal').style.display = 'block';
+      }
+    }
+    
+    // 關閉 Modal
+    function closeModal() {
+      document.getElementById('diaryModal').style.display = 'none';
+      currentDiaryId = null;
+    }
+    
+    // 朗讀 Modal 中的日記
+    function speakDiaryInModal() {
+      const content = document.getElementById('modal-content').textContent;
+      speak(content);
+    }
+    
+    // 保存編輯後的日記
+    function saveEditedDiary() {
+      const newContent = document.getElementById('edit-diary-content').value.trim();
+      if (!newContent) {
+        toast.show('日記內容不能為空！');
+        return;
+      }
+      
+      let diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      const index = diaries.findIndex(d => d.id == currentDiaryId);
+      
+      if (index !== -1) {
+        // 更新內容
+        diaries[index].content = newContent;
+        // 添加編輯時間標記
+        diaries[index].editedAt = new Date().toISOString();
+        
+        // 保存回 localStorage
+        localStorage.setItem('japanese-diaries', JSON.stringify(diaries));
+        
+        // 更新視圖內容
+        document.getElementById('modal-content').textContent = newContent;
+        
+        // 切換回查看視圖
+        document.querySelector('.modal-tab[data-modal-tab="view"]').click();
+        
+        // 重新載入日記列表
+        loadDiaries();
+        
+        toast.show('日記已更新！');
+      }
+    }
+    
+    // 取消編輯
+    function cancelEdit() {
+      document.querySelector('.modal-tab[data-modal-tab="view"]').click();
+    }
+    
+    // 確認刪除對話框
+    function confirmDeleteDiary() {
+      toast.confirm('確定要刪除此日記嗎？', () => {
+        deleteDiary();
+      });
+    }
+    
+    // 刪除日記
+    function deleteDiary() {
+      let diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      diaries = diaries.filter(d => d.id != currentDiaryId);
+      localStorage.setItem('japanese-diaries', JSON.stringify(diaries));
+      loadDiaries();
+      closeModal();
+    }
+    
+    // 清空輸入框
+    function clearInput() {
+      document.getElementById('diary').value = '';
+    }
+    
+    // 導出所有日記
+    function exportDiaries() {
+      const diaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+      if (diaries.length === 0) {
+        toast.show('沒有日記可導出！');
+        return;
+      }
+      
+      const exportObj = {
+        version: 1,
+        date: new Date().toISOString(),
+        diaries: diaries
+      };
+      
+      const dataStr = JSON.stringify(exportObj, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      
+      const exportDate = new Date().toLocaleDateString('zh-TW').replace(/\//g, '-');
+      const fileName = `japanese-diary-export-${exportDate}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', fileName);
+      linkElement.style.display = 'none';
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+      
+      toast.show('日記已導出！');
+    }
+    
+    // 導入日記
+    function importDiaries(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          
+          // 驗證導入的數據格式
+          if (!importedData.diaries || !Array.isArray(importedData.diaries)) {
+            throw new Error('無效的日記文件格式');
+          }
+          
+          const existingDiaries = JSON.parse(localStorage.getItem('japanese-diaries') || '[]');
+          const newDiaries = [];
+          const existingIds = new Set(existingDiaries.map(d => d.id));
+          
+          // 合併日記，避免重複
+          importedData.diaries.forEach(diary => {
+            if (!existingIds.has(diary.id)) {
+              newDiaries.push(diary);
+            }
+          });
+          
+          // 按時間排序
+          const allDiaries = [...existingDiaries, ...newDiaries]
+            .sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          localStorage.setItem('japanese-diaries', JSON.stringify(allDiaries));
+          loadDiaries();
+          
+          toast.show(`成功導入 ${newDiaries.length} 條新日記！`);
+        } catch (error) {
+          toast.show('導入失敗：' + error.message);
+        }
+        
+        // 清除文件輸入，這樣同一文件可以再次選擇
+        event.target.value = '';
+      };
+      
+      reader.readAsText(file);
+    }
+    
+    // 刪除所有日記
+    function clearAllDiaries() {
+      localStorage.removeItem('japanese-diaries');
+      loadDiaries();
+      toast.show('已刪除所有日記！');
+    }
+    
+    // 點擊 Modal 外部關閉 Modal
+    window.onclick = function(event) {
+      const modal = document.getElementById('diaryModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    };
+
+    // 自訂提示系統
+    const toast = {
+      container: document.getElementById('toast-container'),
+      message: document.getElementById('toast-message'),
+      buttons: document.getElementById('toast-buttons'),
+      
+      // 顯示簡單的提示訊息（替代 alert）
+      show(message, timeout = 3000) {
+        this.message.textContent = message;
+        this.buttons.innerHTML = `<button class="primary-btn" id="toast-ok">確定</button>`;
+        document.getElementById('toast-ok').addEventListener('click', () => this.hide());
+        
+        this.container.style.display = 'flex';
+        
+        if (timeout > 0) {
+          setTimeout(() => this.hide(), timeout);
+        }
+      },
+      
+      // 顯示確認對話框（替代 confirm）
+      confirm(message, onConfirm, onCancel) {
+        this.message.textContent = message;
+        this.buttons.innerHTML = `
+          <button class="primary-btn" id="toast-confirm">確定</button>
+          <button class="secondary-btn" id="toast-cancel">取消</button>
+        `;
+        
+        document.getElementById('toast-confirm').addEventListener('click', () => {
+          this.hide();
+          if (onConfirm) onConfirm();
+        });
+        
+        document.getElementById('toast-cancel').addEventListener('click', () => {
+          this.hide();
+          if (onCancel) onCancel();
+        });
+        
+        this.container.style.display = 'flex';
+      },
+      
+      // 隱藏提示框
+      hide() {
+        this.container.style.display = 'none';
+      }
+    };
+
+    // 插入文字到日記輸入框
+    function insertTextToDiary(text) {
+      const diaryElement = document.getElementById('diary');
+      const cursorPos = diaryElement.selectionStart;
+      const textBefore = diaryElement.value.substring(0, cursorPos);
+      const textAfter = diaryElement.value.substring(cursorPos);
+      
+      // 在游標處插入文字
+      diaryElement.value = textBefore + text + textAfter;
+      
+      // 重新設定游標位置在新插入文字之後
+      diaryElement.selectionStart = cursorPos + text.length;
+      diaryElement.selectionEnd = cursorPos + text.length;
+      diaryElement.focus();
+    }
+  </script>
+</body>
+</html> 
