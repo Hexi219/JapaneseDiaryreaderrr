@@ -6,12 +6,18 @@
   <title>日語日記朗讀</title>
   <style>
     :root {
-      --primary-color: #4a6fa5;
-      --accent-color: #ff8c42;
+      --primary-color: #007aff;
+      --secondary-color: #5ac8fa;
+      --danger-color: #ff3b30;
+      --success-color: #34c759;
       --bg-color: #f5f7fa;
-      --text-color: #333;
+      --text-color: #333333;
       --card-bg: #ffffff;
-      --border-color: #dce0e6;
+      --border-color: #e2e2e2;
+      --border-radius: 12px;
+      --button-radius: 8px;
+      --section-spacing: 24px;
+      --element-spacing: 16px;
     }
 
     body { 
@@ -21,6 +27,8 @@
       background: var(--bg-color);
       color: var(--text-color);
       transition: all 0.3s ease;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
@@ -30,24 +38,26 @@
     }
 
     header {
-      background: var(--primary-color);
-      color: white;
+      background: var(--card-bg);
+      color: var(--text-color);
       padding: 15px 20px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: var(--section-spacing);
     }
 
     header h1 {
       margin: 0;
       font-size: 1.8rem;
+      font-weight: 500;
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 10px;
+      border-radius: var(--border-radius);
       padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: var(--section-spacing);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     textarea { 
@@ -55,11 +65,11 @@
       height: 120px;
       font-size: 1.1rem;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       padding: 12px;
       box-sizing: border-box;
       resize: vertical;
-      margin-bottom: 15px;
+      margin-bottom: var(--element-spacing);
       transition: border 0.3s;
       font-family: inherit;
     }
@@ -67,26 +77,25 @@
     textarea:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+      box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.15);
     }
 
     .button-group {
       display: flex;
-      gap: 10px;
+      gap: var(--element-spacing);
       flex-wrap: wrap;
-      margin-bottom: 15px;
+      margin-bottom: var(--element-spacing);
+      align-items: center;
     }
 
     button { 
       font-size: 1rem;
-      padding: 8px 16px;
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: var(--button-radius);
       cursor: pointer;
       border: none;
       transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      font-weight: 500;
     }
 
     .primary-btn {
@@ -95,33 +104,35 @@
     }
 
     .secondary-btn {
-      background-color: white;
+      background-color: rgba(0, 122, 255, 0.1);
       color: var(--primary-color);
-      border: 1px solid var(--primary-color);
     }
 
     .danger-btn {
-      background-color: #f44336;
+      background-color: var(--danger-color);
       color: white;
     }
 
     button:hover {
       opacity: 0.9;
-      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     h2 {
-      color: var(--primary-color);
+      color: var(--text-color);
       font-size: 1.5rem;
       margin-top: 0;
-      margin-bottom: 15px;
+      margin-bottom: var(--element-spacing);
       font-weight: 500;
     }
 
     h3 {
       font-size: 1.2rem;
       margin-top: 0;
-      margin-bottom: 15px;
+      margin-bottom: var(--element-spacing);
       font-weight: 500;
       color: var(--text-color);
     }
@@ -129,21 +140,24 @@
     /* 標籤切換樣式 */
     .tabs {
       display: flex;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 20px;
+      margin-bottom: var(--element-spacing);
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: hidden;
     }
 
     .tab {
-      padding: 10px 20px;
+      flex: 1;
+      padding: 14px 20px;
       cursor: pointer;
-      border-bottom: 3px solid transparent;
+      text-align: center;
       transition: all 0.3s;
+      font-weight: 500;
     }
 
     .tab.active {
-      border-bottom-color: var(--primary-color);
       color: var(--primary-color);
-      font-weight: 500;
+      box-shadow: inset 0 -2px 0 var(--primary-color);
     }
 
     .tab-content {
@@ -157,8 +171,8 @@
     /* 主題選擇 */
     .themes {
       display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: var(--element-spacing);
+      margin-bottom: var(--element-spacing);
       flex-wrap: wrap;
     }
 
@@ -170,16 +184,20 @@
     }
 
     .theme-preview {
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       margin-bottom: 5px;
-      border: 2px solid var(--border-color);
+      border: 2px solid transparent;
       transition: transform 0.2s;
     }
     
     .theme-preview:hover {
       transform: scale(1.1);
+    }
+
+    .theme-option.active .theme-preview {
+      border-color: var(--primary-color);
     }
 
     .theme-name {
@@ -189,23 +207,141 @@
 
     /* 語速控制 */
     .control {
-      margin: 15px 0;
+      margin: var(--element-spacing) 0;
+      padding-bottom: var(--element-spacing);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .control:last-child {
+      border-bottom: none;
     }
 
     .control label {
       display: block;
-      margin-bottom: 8px;
       font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    .speed-control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .rate-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--primary-color);
+      background: rgba(0, 122, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 16px;
+    }
+
+    .slider-container {
+      position: relative;
+      padding: 0 10px;
+      margin-bottom: 8px;
     }
 
     .slider {
       width: 100%;
-      margin-bottom: 5px;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: #e6e6e6;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .value-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: var(--element-spacing);
+      padding: 0 10px;
+    }
+    
+    /* 聲音選擇器 */
+    .voice-selection {
+      margin: var(--element-spacing) 0;
+    }
+    
+    .voice-selection label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    
+    .voice-selector {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: var(--button-radius);
+      border: 1px solid var(--border-color);
+      background-color: #fff;
+      color: var(--text-color);
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23999' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 20px;
+    }
+    
+    .voice-selector:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.15);
+    }
+
+    /* 速度預設選項 */
+    .speed-preset {
+      display: flex;
+      margin-bottom: var(--element-spacing);
+      background: #f0f0f0;
+      border-radius: var(--button-radius);
+      overflow: hidden;
+    }
+    
+    .preset-btn {
+      flex: 1;
+      padding: 10px 0;
+      background: none;
+      border: none;
+      color: var(--text-color);
       font-size: 0.9rem;
-      color: var(--primary-color);
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 0;
+    }
+    
+    .preset-btn.active {
+      background-color: var(--primary-color);
+      color: white;
     }
 
     /* 日記列表 */
@@ -215,10 +351,10 @@
     }
 
     .diary-item {
-      padding: 12px;
+      padding: 16px;
       margin-bottom: 10px;
       background: var(--card-bg);
-      border-radius: 8px;
+      border-radius: var(--button-radius);
       cursor: pointer;
       border: 1px solid var(--border-color);
       transition: all 0.2s;
@@ -230,6 +366,7 @@
     .diary-item:hover {
       border-color: var(--primary-color);
       transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
 
     .diary-title {
@@ -254,51 +391,67 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.3);
+      animation: fadeIn 0.15s ease-out;
     }
 
     .modal-content {
       background-color: var(--card-bg);
       margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
+      padding: 24px;
+      border-radius: var(--border-radius);
       max-width: 600px;
       max-height: 80vh;
       overflow-y: auto;
       position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: slideUp 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: var(--element-spacing);
     }
 
     .close {
-      color: #aaa;
-      float: right;
+      color: var(--text-color);
       font-size: 28px;
-      font-weight: bold;
+      font-weight: 300;
       cursor: pointer;
+      line-height: 1;
     }
 
     .modal-tabs {
       display: flex;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: var(--element-spacing);
+      border-radius: var(--button-radius);
+      overflow: hidden;
+      background: #f0f0f0;
     }
 
     .modal-tab {
-      padding: 8px 16px;
+      flex: 1;
+      padding: 10px 16px;
       cursor: pointer;
-      margin-right: 10px;
-      border-bottom: 2px solid transparent;
+      text-align: center;
+      transition: all 0.2s;
     }
 
     .modal-tab.active {
-      border-bottom-color: var(--primary-color);
-      color: var(--primary-color);
+      background-color: var(--primary-color);
+      color: white;
     }
 
     .modal-view, .modal-edit {
@@ -318,8 +471,8 @@
     .diary-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 15px;
+      gap: var(--element-spacing);
+      margin-top: var(--section-spacing);
     }
 
     /* 檔案上傳按鈕 */
@@ -331,20 +484,24 @@
       display: inline-flex;
       align-items: center;
       cursor: pointer;
-      padding: 8px 16px;
-      border-radius: 6px;
-      background-color: white;
+      padding: 10px 18px;
+      border-radius: var(--button-radius);
+      background-color: rgba(0, 122, 255, 0.1);
       color: var(--primary-color);
-      border: 1px solid var(--primary-color);
+      font-weight: 500;
+      font-size: 1rem;
     }
 
     .file-label:hover {
       opacity: 0.9;
-      transform: translateY(-1px);
+    }
+
+    .file-label:active {
+      transform: scale(0.98);
     }
 
     .settings-section {
-      margin-bottom: 25px;
+      margin-bottom: var(--section-spacing);
     }
 
     /* 自訂提示對話框樣式 */
@@ -356,16 +513,16 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.4);
       justify-content: center;
       align-items: center;
     }
 
     .toast-box {
       background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       min-width: 300px;
       max-width: 400px;
       text-align: center;
@@ -381,160 +538,28 @@
     .toast-buttons {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: var(--element-spacing);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 短語面板樣式 */
-    .phrase-panel {
-      background: var(--card-bg);
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-    }
-
-    .phrase-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    
-    .phrase-title {
-      font-weight: 500;
-      font-size: 1.1rem;
-      color: var(--primary-color);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .phrase-icon {
-      width: 20px;
-      height: 20px;
-      color: var(--primary-color);
-    }
-    
-    .phrase-category {
-      margin-bottom: 15px;
-      background: rgba(0,0,0,0.02);
-      border-radius: 6px;
-      padding: 10px;
-      position: relative;
-    }
-    
-    .phrase-category-title {
-      font-weight: 500;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .phrase-category-actions {
-      display: flex;
-      gap: 5px;
-    }
-    
-    .phrase-action-btn {
-      background: none;
-      border: none;
-      color: var(--primary-color);
-      cursor: pointer;
-      padding: 2px 5px;
-      font-size: 0.9rem;
-    }
-    
-    .phrase-action-btn:hover {
-      text-decoration: underline;
-    }
-    
-    .phrases {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    
-    .phrase-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-    
-    .phrase-item:hover {
-      background: var(--primary-color);
-      color: white;
-    }
-    
-    .phrase-edit-mode .phrase-item {
-      padding-right: 30px;
-    }
-    
-    .phrase-delete {
-      display: none;
-      position: absolute;
-      right: 5px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #f44336;
-      font-weight: bold;
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-    
-    .phrase-edit-mode .phrase-delete {
-      display: block;
-    }
-    
-    .phrase-add-form {
-      margin-top: 10px;
-      display: none;
-      gap: 10px;
-    }
-    
-    .phrase-add-form.active {
-      display: flex;
-    }
-    
-    .phrase-add-form input {
-      flex-grow: 1;
-      padding: 6px 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-    
-    .phrase-add-inputs {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-    }
-    
-    .loading-spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      border-top-color: var(--primary-color);
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    /* 響應式調整 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .card {
+        padding: 16px;
+      }
+      
+      .button-group {
+        gap: 10px;
+      }
+      
+      .modal-content {
+        margin: 5% auto;
+        width: 90%;
+        max-width: none;
+      }
     }
   </style>
 </head>
@@ -585,23 +610,23 @@
           <h2>外觀設定</h2>
           <h3>主題顏色</h3>
           <div class="themes">
-            <div class="theme-option" onclick="applyTheme('light')">
+            <div class="theme-option" data-theme="light" onclick="applyTheme('light')">
               <div class="theme-preview" style="background-color: #f5f7fa;"></div>
               <span class="theme-name">淺色</span>
             </div>
-            <div class="theme-option" onclick="applyTheme('nature')">
+            <div class="theme-option" data-theme="nature" onclick="applyTheme('nature')">
               <div class="theme-preview" style="background-color: #e9f4e9;"></div>
               <span class="theme-name">自然</span>
             </div>
-            <div class="theme-option" onclick="applyTheme('sky')">
+            <div class="theme-option" data-theme="sky" onclick="applyTheme('sky')">
               <div class="theme-preview" style="background-color: #e3f0f9;"></div>
               <span class="theme-name">天空</span>
             </div>
-            <div class="theme-option" onclick="applyTheme('warm')">
+            <div class="theme-option" data-theme="warm" onclick="applyTheme('warm')">
               <div class="theme-preview" style="background-color: #fff0e8;"></div>
               <span class="theme-name">溫暖</span>
             </div>
-            <div class="theme-option" onclick="applyTheme('dark')">
+            <div class="theme-option" data-theme="dark" onclick="applyTheme('dark')">
               <div class="theme-preview" style="background-color: #292b36;"></div>
               <span class="theme-name">深色</span>
             </div>
@@ -611,9 +636,35 @@
         <div class="settings-section">
           <h2>朗讀設定</h2>
           <div class="control">
-            <label for="rate">朗讀速度</label>
-            <input type="range" id="rate" class="slider" min="0.5" max="2" value="1" step="0.1">
-            <div class="value-display">速度: <span id="rate-value">1.0</span></div>
+            <div class="speed-control-header">
+              <label for="rate">朗讀速度</label>
+              <span class="rate-value" id="rate-value">1.0x</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="rate" class="slider" min="0.5" max="2" value="1" step="0.1">
+            </div>
+            <div class="value-display">
+              <span>慢</span>
+              <span>快</span>
+            </div>
+          </div>
+          
+          <div class="control">
+            <div class="speed-control-header">
+              <label for="pitch">音調</label>
+              <span class="rate-value" id="pitch-value">1.0</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="pitch" class="slider" min="0.8" max="1.2" value="1" step="0.05">
+            </div>
+          </div>
+          
+          <div class="voice-selection">
+            <label>聲音</label>
+            <select id="voice-select" class="voice-selector">
+              <option value="default">預設女聲</option>
+              <!-- 其他聲音選項會在JS中動態添加 -->
+            </select>
           </div>
         </div>
         
@@ -724,13 +775,14 @@
       // 載入已儲存的日記
       loadDiaries();
       
-      // 設定語速滑動條事件
-      document.getElementById('rate').addEventListener('input', function() {
-        document.getElementById('rate-value').textContent = this.value;
-      });
+      // 載入用戶保存的朗讀設置
+      loadSpeechSettings();
+      
+      // 設置朗讀設定控制
+      setupSpeechControls();
       
       // 嘗試預加載語音
-      window.speechSynthesis.getVoices();
+      setTimeout(loadVoices, 100);
       
       // 載入用戶保存的主題
       const savedTheme = localStorage.getItem('diary-theme') || 'light';
@@ -744,78 +796,80 @@
       document.getElementById('import-file').addEventListener('change', importDiaries);
     });
     
-    // 設置標籤切換邏輯
-    function setupTabs() {
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          // 移除所有標籤的 active 類
-          tabs.forEach(t => t.classList.remove('active'));
-          // 給當前標籤添加 active 類
-          this.classList.add('active');
-          
-          // 隱藏所有內容
-          document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-          });
-          
-          // 顯示對應內容
-          const tabId = this.getAttribute('data-tab');
-          document.getElementById(tabId + '-tab').classList.add('active');
-        });
-      });
-    }
-    
-    // 設置模態框標籤切換
-    function setupModalTabs() {
-      const modalTabs = document.querySelectorAll('.modal-tab');
-      modalTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          // 移除所有標籤的 active 類
-          modalTabs.forEach(t => t.classList.remove('active'));
-          // 給當前標籤添加 active 類
-          this.classList.add('active');
-          
-          // 隱藏所有內容
-          document.querySelector('.modal-view').classList.remove('active');
-          document.querySelector('.modal-edit').classList.remove('active');
-          
-          // 顯示對應內容
-          const tabId = this.getAttribute('data-modal-tab');
-          document.querySelector(`.modal-${tabId}`).classList.add('active');
-          
-          // 如果切換到編輯視圖，載入內容到編輯區
-          if (tabId === 'edit') {
-            document.getElementById('edit-diary-content').value = 
-              document.getElementById('modal-content').textContent;
-          }
-        });
-      });
-    }
-    
-    // 應用主題
-    function applyTheme(themeName) {
-      const theme = themes[themeName] || themes.light;
-      document.documentElement.style.setProperty('--bg-color', theme.bgColor);
-      document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
-      document.documentElement.style.setProperty('--accent-color', theme.accentColor);
-      document.documentElement.style.setProperty('--text-color', theme.textColor);
-      document.documentElement.style.setProperty('--card-bg', theme.cardBg);
-      document.documentElement.style.setProperty('--border-color', theme.borderColor);
+    // 載入朗讀設置
+    function loadSpeechSettings() {
+      // 載入速度設置
+      const savedRate = localStorage.getItem('speech-rate') || '1.0';
+      document.getElementById('rate').value = savedRate;
+      document.getElementById('rate-value').textContent = parseFloat(savedRate).toFixed(1) + 'x';
       
-      // 保存用戶主題選擇
-      localStorage.setItem('diary-theme', themeName);
+      // 載入音調設置
+      const savedPitch = localStorage.getItem('speech-pitch') || '1.0';
+      document.getElementById('pitch').value = savedPitch;
+      document.getElementById('pitch-value').textContent = parseFloat(savedPitch).toFixed(1);
     }
     
-    // 處理標點符號和特殊符號
-    function cleanTextForSpeech(text) {
-      // 保留句號、問號、驚嘆號，但移除或替換其他特殊符號
-      return text
-        .replace(/[、「」『』（）\[\]【】〈〉《》〔〕｛｝［］]/g, ' ')
-        .replace(/[\/\\\|]/g, ' ')
-        .replace(/[+\-*=]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
+    // 加載可用的語音
+    function loadVoices() {
+      // 獲取可用的語音
+      const voices = window.speechSynthesis.getVoices();
+      
+      // 過濾出日語語音
+      const japaneseVoices = voices.filter(voice => voice.lang.includes('ja'));
+      
+      if (japaneseVoices.length > 0) {
+        const voiceSelect = document.getElementById('voice-select');
+        
+        // 清空現有選項（保留默認選項）
+        while (voiceSelect.options.length > 1) {
+          voiceSelect.remove(1);
+        }
+        
+        // 添加日語語音選項
+        japaneseVoices.forEach(voice => {
+          const option = document.createElement('option');
+          option.value = voice.name;
+          option.textContent = voice.name;
+          voiceSelect.appendChild(option);
+        });
+        
+        // 設置保存的語音
+        const savedVoice = localStorage.getItem('speech-voice');
+        if (savedVoice && voiceSelect.querySelector(`option[value="${savedVoice}"]`)) {
+          voiceSelect.value = savedVoice;
+        }
+      }
+      
+      // 監聽語音列表變化（某些瀏覽器會延遲加載語音）
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    
+    // 設置朗讀設定控制
+    function setupSpeechControls() {
+      // 設置速度滑塊
+      const rateInput = document.getElementById('rate');
+      rateInput.addEventListener('input', function() {
+        const value = parseFloat(this.value).toFixed(1);
+        document.getElementById('rate-value').textContent = value + 'x';
+        localStorage.setItem('speech-rate', value);
+      });
+      
+      // 設置音調滑塊
+      const pitchInput = document.getElementById('pitch');
+      pitchInput.addEventListener('input', function() {
+        const value = parseFloat(this.value).toFixed(1);
+        document.getElementById('pitch-value').textContent = value;
+        localStorage.setItem('speech-pitch', value);
+      });
+      
+      // 設置語音選擇器
+      const voiceSelect = document.getElementById('voice-select');
+      voiceSelect.addEventListener('change', function() {
+        localStorage.setItem('speech-voice', this.value);
+      });
+      
+      // 監聽語音列表變化（某些瀏覽器會延遲加載語音）
+      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
     
     // 語音朗讀功能
@@ -836,23 +890,31 @@
       const utter = new SpeechSynthesisUtterance(cleanedText);
       utter.lang = "ja-JP";
       
-      // 嘗試選擇女性日語語音
-      const voices = window.speechSynthesis.getVoices();
-      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
-        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
-      
-      if (jaFemaleVoices.length > 0) {
-        utter.voice = jaFemaleVoices[0];
-      } else {
-        const jaVoices = voices.filter(v => v.lang === "ja-JP");
-        if (jaVoices.length > 0) utter.voice = jaVoices[0];
-      }
-      
-      // 取得使用者設定的語速
-      const rate = parseFloat(document.getElementById('rate').value);
-      utter.rate = rate;
-      utter.pitch = 1.1;
+      // 設置語音參數
+      utter.rate = parseFloat(document.getElementById('rate').value);
+      utter.pitch = parseFloat(document.getElementById('pitch').value);
       utter.volume = 1.0;
+      
+      // 設置選擇的語音
+      const selectedVoice = document.getElementById('voice-select').value;
+      const voices = window.speechSynthesis.getVoices();
+      
+      if (selectedVoice !== 'default') {
+        // 使用用戶選擇的語音
+        const voice = voices.find(v => v.name === selectedVoice);
+        if (voice) utter.voice = voice;
+      } else {
+        // 使用默認女聲
+        const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+          (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
+        
+        if (jaFemaleVoices.length > 0) {
+          utter.voice = jaFemaleVoices[0];
+        } else {
+          const jaVoices = voices.filter(v => v.lang.includes('ja'));
+          if (jaVoices.length > 0) utter.voice = jaVoices[0];
+        }
+      }
       
       // 設置結束事件處理器
       utter.onend = function() {
@@ -882,23 +944,31 @@
       const utter = new SpeechSynthesisUtterance(cleanedText);
       utter.lang = "ja-JP";
       
-      // 嘗試選擇女性日語語音
-      const voices = window.speechSynthesis.getVoices();
-      const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
-        (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
-      
-      if (jaFemaleVoices.length > 0) {
-        utter.voice = jaFemaleVoices[0];
-      } else {
-        const jaVoices = voices.filter(v => v.lang === "ja-JP");
-        if (jaVoices.length > 0) utter.voice = jaVoices[0];
-      }
-      
-      // 取得使用者設定的語速
-      const rate = parseFloat(document.getElementById('rate').value);
-      utter.rate = rate;
-      utter.pitch = 1.1;
+      // 設置語音參數
+      utter.rate = parseFloat(document.getElementById('rate').value);
+      utter.pitch = parseFloat(document.getElementById('pitch').value);
       utter.volume = 1.0;
+      
+      // 設置選擇的語音
+      const selectedVoice = document.getElementById('voice-select').value;
+      const voices = window.speechSynthesis.getVoices();
+      
+      if (selectedVoice !== 'default') {
+        // 使用用戶選擇的語音
+        const voice = voices.find(v => v.name === selectedVoice);
+        if (voice) utter.voice = voice;
+      } else {
+        // 使用默認女聲
+        const jaFemaleVoices = voices.filter(v => v.lang === "ja-JP" && 
+          (!v.name || v.name.match(/(female|女性|Kyoko|Mizuki|Google 日本語|ja-JP-Standard-A|ja-JP-Wavenet-A)/i)));
+        
+        if (jaFemaleVoices.length > 0) {
+          utter.voice = jaFemaleVoices[0];
+        } else {
+          const jaVoices = voices.filter(v => v.lang.includes('ja'));
+          if (jaVoices.length > 0) utter.voice = jaVoices[0];
+        }
+      }
       
       // 設置結束事件處理器
       utter.onend = function() {
@@ -1250,6 +1320,137 @@
       diaryElement.selectionStart = cursorPos + text.length;
       diaryElement.selectionEnd = cursorPos + text.length;
       diaryElement.focus();
+    }
+
+    // 設置朗讀速度控制
+    function setupSpeedControls() {
+      // 設置速度滑塊
+      const rateInput = document.getElementById('rate');
+      rateInput.addEventListener('input', function() {
+        updateRateValue(this.value);
+      });
+      
+      // 預設速度按鈕
+      const presetButtons = document.querySelectorAll('.preset-btn');
+      presetButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const rate = this.getAttribute('data-rate');
+          document.getElementById('rate').value = rate;
+          updateRateValue(rate);
+          
+          // 更新活動按鈕狀態
+          presetButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+      
+      // 設置默認選中的預設按鈕
+      const defaultRate = document.getElementById('rate').value;
+      const matchingPreset = document.querySelector(`.preset-btn[data-rate="${defaultRate}"]`);
+      if (matchingPreset) {
+        matchingPreset.classList.add('active');
+      }
+    }
+    
+    // 更新朗讀速度顯示
+    function updateRateValue(value) {
+      document.getElementById('rate-value').textContent = parseFloat(value).toFixed(1);
+      
+      // 保存用戶設定的朗讀速度
+      localStorage.setItem('speech-rate', value);
+      
+      // 更新預設按鈕的活動狀態
+      const presetButtons = document.querySelectorAll('.preset-btn');
+      presetButtons.forEach(btn => {
+        if (btn.getAttribute('data-rate') === value) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // 設置標籤切換邏輯
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // 移除所有標籤的 active 類
+          tabs.forEach(t => t.classList.remove('active'));
+          // 給當前標籤添加 active 類
+          this.classList.add('active');
+          
+          // 隱藏所有內容
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          
+          // 顯示對應內容
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId + '-tab').classList.add('active');
+        });
+      });
+    }
+    
+    // 設置模態框標籤切換
+    function setupModalTabs() {
+      const modalTabs = document.querySelectorAll('.modal-tab');
+      modalTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // 移除所有標籤的 active 類
+          modalTabs.forEach(t => t.classList.remove('active'));
+          // 給當前標籤添加 active 類
+          this.classList.add('active');
+          
+          // 隱藏所有內容
+          document.querySelector('.modal-view').classList.remove('active');
+          document.querySelector('.modal-edit').classList.remove('active');
+          
+          // 顯示對應內容
+          const tabId = this.getAttribute('data-modal-tab');
+          document.querySelector(`.modal-${tabId}`).classList.add('active');
+          
+          // 如果切換到編輯視圖，載入內容到編輯區
+          if (tabId === 'edit') {
+            document.getElementById('edit-diary-content').value = 
+              document.getElementById('modal-content').textContent;
+          }
+        });
+      });
+    }
+    
+    // 應用主題
+    function applyTheme(themeName) {
+      const theme = themes[themeName] || themes.light;
+      document.documentElement.style.setProperty('--bg-color', theme.bgColor);
+      document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
+      document.documentElement.style.setProperty('--accent-color', theme.accentColor);
+      document.documentElement.style.setProperty('--text-color', theme.textColor);
+      document.documentElement.style.setProperty('--card-bg', theme.cardBg);
+      document.documentElement.style.setProperty('--border-color', theme.borderColor);
+      
+      // 保存用戶主題選擇
+      localStorage.setItem('diary-theme', themeName);
+      
+      // 更新主題選擇按鈕的狀態
+      document.querySelectorAll('.theme-option').forEach(option => {
+        if (option.getAttribute('data-theme') === themeName) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+    }
+    
+    // 處理標點符號和特殊符號
+    function cleanTextForSpeech(text) {
+      // 保留句號、問號、驚嘆號，但移除或替換其他特殊符號
+      return text
+        .replace(/[、「」『』（）\[\]【】〈〉《》〔〕｛｝［］]/g, ' ')
+        .replace(/[\/\\\|]/g, ' ')
+        .replace(/[+\-*=]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
   </script>
 </body>
